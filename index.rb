@@ -1,23 +1,68 @@
 # frozen_string_literal: true
 
-stocks = [17, 3, 6, 9, 15, 8, 6, 1, 10]
-
-def bubble(nums)
-  sorted = false
-  until sorted
-    sorted = true 
-    i = 0
-    while i < nums.length - 1
-      if nums[i] > nums[i + 1]
-        aux = nums[i]
-        nums[i] = nums[i + 1]
-        nums[i + 1] = aux
-        sorted = false # A swap occurred, so the array is not yet sorted
-      end
-      i += 1
-    end
+module Towable
+  def can_tow(kilos)
+    kilos > 2000
   end
-  puts nums
 end
 
-bubble(stocks)
+class Vehicle
+  @@number_of_vehicles = 0
+  def initialize
+    @@number_of_vehicles += 1
+  end
+
+  def self.number_of_vehicles
+    puts "This program has created #{@@number_of_vehicles} vehicles"
+  end
+
+  def speed_up(s)
+    @current_speed += s
+  end
+
+  def brake(s)
+    @current_speed -= s
+  end
+
+  def shut_engine
+    @current_speed = 0
+    puts 'engine stopped'
+  end
+
+  def spray_paint(color)
+    self.color = color
+  end
+end
+
+class MyCar < Vehicle
+  attr_accessor :color, :make
+  attr_reader :year, :current_speed
+
+  TIS_MINE = 'El branquicho constante'
+  def initialize(y, c, m)
+    @year = y
+    @color = c
+    @make = m
+    @current_speed = 0
+  end
+end
+
+class MyTruck < Vehicle
+  NOT_MINE = 'lo vendi al blancote'
+  include Towable
+end
+blanquicho = MyCar.new(2017, 'white', 'peugeot 208')
+
+blanquicho.speed_up(84)
+blanquicho.brake(4)
+puts blanquicho.current_speed
+blanquicho.color = 'grey'
+puts blanquicho.color
+puts blanquicho.year
+puts blanquicho.make
+blanquicho.spray_paint('green')
+puts blanquicho.color
+puts Vehicle.ancestors
+blancote = MyTruck.new
+puts blancote.can_tow(25)
+puts MyTruck.ancestors
